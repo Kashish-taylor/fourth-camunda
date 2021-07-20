@@ -12,9 +12,7 @@ url;</camunda:script>
             <camunda:inputParameter name="method">GET</camunda:inputParameter>
             <camunda:outputParameter name="getEmployee">
               <camunda:script scriptFormat="JavaScript">print("Employee Details=" + response);
-response;
-
-</camunda:script>
+response;</camunda:script>
             </camunda:outputParameter>
           </camunda:inputOutput>
           <camunda:connectorId>http-connector</camunda:connectorId>
@@ -30,10 +28,11 @@ response;
     </bpmn:exclusiveGateway>
     <bpmn:endEvent id="EndEvent_0ksujii">
       <bpmn:incoming>SequenceFlow_1nlxq9r</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_123j5ai</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="SequenceFlow_0964r6m" sourceRef="ExclusiveGateway_1lpk0ni" targetRef="CallActivity_1">
+    <bpmn:sequenceFlow id="SequenceFlow_0964r6m" name="senior" sourceRef="ExclusiveGateway_1lpk0ni" targetRef="Task_1axw2q6">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" language="JavaScript">var verified = false;
-var age = parseInt(JSON.stringify(getEmployee).slice(-4,-2));
+var age = JSON.parse(getEmployee).age;
 if(age&gt;=60)
 {
 verified = true;
@@ -51,7 +50,7 @@ verified;</bpmn:conditionExpression>
         <camunda:in variables="all" />
         <camunda:out variables="all" />
       </bpmn:extensionElements>
-      <bpmn:incoming>SequenceFlow_0964r6m</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0k3loqz</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1nlxq9r</bpmn:outgoing>
     </bpmn:callActivity>
     <bpmn:callActivity id="CallActivity_2" name="young" calledElement="add-young-employee">
@@ -65,68 +64,113 @@ verified;</bpmn:conditionExpression>
     <bpmn:endEvent id="EndEvent_0lqusv1">
       <bpmn:incoming>SequenceFlow_1aa8015</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="SequenceFlow_0bg9jzj" sourceRef="ExclusiveGateway_1lpk0ni" targetRef="CallActivity_2">
+    <bpmn:sequenceFlow id="SequenceFlow_0bg9jzj" name="junior" sourceRef="ExclusiveGateway_1lpk0ni" targetRef="CallActivity_2">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" language="JavaScript">var verified = false;
-print("before age");
-var age = parseInt(JSON.stringify(getEmployee).slice(-4,-2));
-print("mid age");
+var age = JSON.parse(getEmployee).age;
 if(age&lt;60)
 {
 verified = true;
 }
-print("after age");
 verified</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_1aa8015" sourceRef="CallActivity_2" targetRef="EndEvent_0lqusv1" />
+    <bpmn:sequenceFlow id="SequenceFlow_0k3loqz" sourceRef="Task_1axw2q6" targetRef="CallActivity_1">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" language="JavaScript">var flag = false;
+if( errors.length == 0)
+{
+flag = true;
+}
+flag;</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:businessRuleTask id="Task_1axw2q6" name="Senior Citizen validation" camunda:resultVariable="errors" camunda:decisionRef="senior-citizen-validation">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="employeeObj">
+            <camunda:script scriptFormat="JavaScript">var obj = getEmployee;
+obj;</camunda:script>
+          </camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0964r6m</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0k3loqz</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_123j5ai</bpmn:outgoing>
+    </bpmn:businessRuleTask>
+    <bpmn:sequenceFlow id="SequenceFlow_123j5ai" sourceRef="Task_1axw2q6" targetRef="EndEvent_0ksujii">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" language="JavaScript">var flag =false;
+if( errors.length &gt; 0)
+{
+flag = true;
+print(errors);
+}
+flag;</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="get-request-employee">
       <bpmndi:BPMNShape id="ServiceTask_1bzu5qd_di" bpmnElement="ServiceTask_1bzu5qd">
-        <dc:Bounds x="270" y="190" width="100" height="80" />
+        <dc:Bounds x="270" y="380" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ExclusiveGateway_1lpk0ni_di" bpmnElement="ExclusiveGateway_1lpk0ni" isMarkerVisible="true">
-        <dc:Bounds x="488" y="205" width="50" height="50" />
+        <dc:Bounds x="473" y="395" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="EndEvent_0ksujii_di" bpmnElement="EndEvent_0ksujii">
-        <dc:Bounds x="755" y="105" width="36" height="36" />
+        <dc:Bounds x="972" y="232" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_0964r6m_di" bpmnElement="SequenceFlow_0964r6m">
-        <di:waypoint x="513" y="205" />
-        <di:waypoint x="513" y="123" />
-        <di:waypoint x="593" y="123" />
+        <di:waypoint x="498" y="395" />
+        <di:waypoint x="498" y="290" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="497" y="308.0000000000007" width="32" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1nlxq9r_di" bpmnElement="SequenceFlow_1nlxq9r">
-        <di:waypoint x="693" y="123" />
-        <di:waypoint x="755" y="123" />
+        <di:waypoint x="800" y="250" />
+        <di:waypoint x="972" y="250" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="StartEvent_1vl6xno_di" bpmnElement="StartEvent_1vl6xno">
-        <dc:Bounds x="152" y="212" width="36" height="36" />
+        <dc:Bounds x="152" y="402" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_0r9lxn3_di" bpmnElement="SequenceFlow_0r9lxn3">
-        <di:waypoint x="188" y="230" />
-        <di:waypoint x="270" y="230" />
+        <di:waypoint x="188" y="420" />
+        <di:waypoint x="270" y="420" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1ddgkjy_di" bpmnElement="SequenceFlow_1ddgkjy">
-        <di:waypoint x="370" y="230" />
-        <di:waypoint x="488" y="230" />
+        <di:waypoint x="370" y="420" />
+        <di:waypoint x="473" y="420" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="CallActivity_0r348vz_di" bpmnElement="CallActivity_1">
-        <dc:Bounds x="593" y="83" width="100" height="80" />
+        <dc:Bounds x="700" y="210" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="CallActivity_1l3353f_di" bpmnElement="CallActivity_2">
-        <dc:Bounds x="593" y="300" width="100" height="80" />
+        <dc:Bounds x="593" y="490" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="EndEvent_0lqusv1_di" bpmnElement="EndEvent_0lqusv1">
-        <dc:Bounds x="755" y="322" width="36" height="36" />
+        <dc:Bounds x="755" y="512" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_0bg9jzj_di" bpmnElement="SequenceFlow_0bg9jzj">
-        <di:waypoint x="513" y="255" />
-        <di:waypoint x="513" y="340" />
-        <di:waypoint x="590" y="340" />
+        <di:waypoint x="498" y="445" />
+        <di:waypoint x="498" y="530" />
+        <di:waypoint x="593" y="530" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="499" y="485" width="28" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1aa8015_di" bpmnElement="SequenceFlow_1aa8015">
-        <di:waypoint x="693" y="340" />
-        <di:waypoint x="755" y="340" />
+        <di:waypoint x="693" y="530" />
+        <di:waypoint x="755" y="530" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0k3loqz_di" bpmnElement="SequenceFlow_0k3loqz">
+        <di:waypoint x="548" y="250" />
+        <di:waypoint x="700" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="BusinessRuleTask_01yoy5u_di" bpmnElement="Task_1axw2q6">
+        <dc:Bounds x="448" y="210" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_123j5ai_di" bpmnElement="SequenceFlow_123j5ai">
+        <di:waypoint x="498" y="210" />
+        <di:waypoint x="498" y="80" />
+        <di:waypoint x="990" y="80" />
+        <di:waypoint x="990" y="232" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

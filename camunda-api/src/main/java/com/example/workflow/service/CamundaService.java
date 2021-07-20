@@ -19,8 +19,6 @@ public class CamundaService {
 	        instance.setVariable("employeeName", employeeName);
 	        response = instance.executeWithVariablesInReturn();
 	        VariableMap variables = response.getVariables();
-	        System.out.println("getEmp = " + variables.get("getEmployee"));
 	        return variables.get("getEmployee");
 	    }
-
 }

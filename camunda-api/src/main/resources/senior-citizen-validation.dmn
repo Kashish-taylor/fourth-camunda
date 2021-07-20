@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/1.0" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="Definitions_1vsbbry" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="3.4.0">
+  <decision id="senior-citizen-validation" name="Senior Citizen Validation">
+    <extensionElements>
+      <biodi:bounds x="150" y="150" width="180" height="80" />
+    </extensionElements>
+    <decisionTable id="decisionTable_1" hitPolicy="RULE ORDER">
+      <input id="InputClause_0lzbclq" label="employee" camunda:inputVariable="employee">
+        <inputExpression id="LiteralExpression_1kd15pk" typeRef="string" expressionLanguage="JavaScript">
+          <text>var obj= getEmployee;
+obj;</text>
+        </inputExpression>
+      </input>
+      <output id="output_1" label="Field" name="Field" typeRef="string" />
+      <output id="OutputClause_1n6b0p7" label="Message" name="Message" typeRef="string" />
+      <rule id="DecisionRule_09en07x">
+        <inputEntry id="UnaryTests_1jhd0b1" expressionLanguage="javascript">
+          <text>JSON.parse(getEmployee).rasanCard == 0</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0javbv6" expressionLanguage="javascript">
+          <text>"rasanCard"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1vap4ri">
+          <text>"Employee must have RasanCard."</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_00rm3ir">
+        <inputEntry id="UnaryTests_0oqf35k" expressionLanguage="javascript">
+          <text>JSON.parse(getEmployee).pensionAmmount &lt;= 20000</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0xhs8gb" expressionLanguage="javascript">
+          <text>"pensionAmount"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1amif2l">
+          <text>"Pension Amount Should be less than 20000."</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1fuyowc">
+        <inputEntry id="UnaryTests_1vfxrf9" expressionLanguage="javascript">
+          <text>JSON.parse(getEmployee).voterId == 0</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1xpbnm7" expressionLanguage="javascript">
+          <text>"voterId"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0rcoj2q">
+          <text>"Employee must have Voter ID."</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+</definitions>

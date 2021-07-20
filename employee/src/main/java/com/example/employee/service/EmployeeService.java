@@ -35,12 +35,12 @@ public class EmployeeService {
     }
 
     public void saveOldEmployee(Employee employee) {
-        OldEmployee oldEmployee=new OldEmployee(employee.getName(),employee.getAge());
+        OldEmployee oldEmployee=new OldEmployee(employee.getName(),employee.getAge(),employee.getPensionAmount(),employee.getVoterId(),employee.getRasanCard());
         oLdEmployeeRepository.save(oldEmployee);
     }
 
     public void saveYoungEmployee(Employee employee) {
-        YoungEmployee youngEmployee=new YoungEmployee(employee.getName(),employee.getAge());
+        YoungEmployee youngEmployee=new YoungEmployee(employee.getName(),employee.getAge(),employee.getPensionAmount(),employee.getVoterId(),employee.getRasanCard());
         youngEmployeeRepository.save(youngEmployee);
     }
 }

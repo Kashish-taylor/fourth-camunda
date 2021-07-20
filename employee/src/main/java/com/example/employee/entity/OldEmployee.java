@@ -3,7 +3,6 @@ package com.example.employee.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 @Entity
 public class OldEmployee {
@@ -15,11 +14,23 @@ public class OldEmployee {
     @Column(name = "age")
     private Integer age;
 
+    @Column(name = "pensionAmount")
+    private Integer pensionAmount;
+
+    @Column(name = "voterId")
+    private Integer voterId;
+
+    @Column(name = "rasanCard")
+    private Integer rasanCard;
+
     public OldEmployee(){}
 
-    public OldEmployee(String name, Integer age) {
+    public OldEmployee(String name, Integer age, Integer pensionAmount, Integer voterId, Integer rasanCard) {
         this.name = name;
         this.age = age;
+        this.pensionAmount = pensionAmount;
+        this.voterId = voterId;
+        this.rasanCard = rasanCard;
     }
 
     public String getName() {
@@ -38,12 +49,38 @@ public class OldEmployee {
         this.age = age;
     }
 
+    public Integer getPensionAmount() {
+        return pensionAmount;
+    }
+
+    public void setPensionAmount(Integer pensionAmount) {
+        this.pensionAmount = pensionAmount;
+    }
+
+    public Integer getVoterId() {
+        return voterId;
+    }
+
+    public void setVoterId(Integer voterId) {
+        this.voterId = voterId;
+    }
+
+    public Integer getRasanCard() {
+        return rasanCard;
+    }
+
+    public void setRasanCard(Integer rasanCard) {
+        this.rasanCard = rasanCard;
+    }
 
     @Override
     public String toString() {
-        return "Employee{" +
+        return "OldEmployee{" +
                 "name='" + name + '\'' +
                 ", age=" + age +
+                ", pesnionAmount=" + pensionAmount +
+                ", voterId=" + voterId +
+                ", rasanCard=" + rasanCard +
                 '}';
     }
 }
